@@ -5,6 +5,9 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './domain/user/user.module';
 import { CarteiraModule } from './domain/carteira/carteira.module';
+import { LojistaModule } from './domain/lojista/lojista.module';
+import { TransactionsModule } from './domain/transactions/transactions.module';
+import { LojistaService } from './domain/use_cases/lojista/lojista.service';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -13,18 +16,21 @@ dotenv.config();
   imports: [
     TypeOrmModule.forRoot({
       type:'postgres',
-      database:process.env.DB,
+      database:process.env.DB_DATABASE,
       host:'localhost',
-      port:Number(process.env.PORT),
-      username:process.env.USER,
-      password:process.env.PASS,
+      port:Number(process.env.DB_PORT),
+      username:process.env.DB_USER,
+      password:process.env.DB_PASS,
       synchronize:true,
+      autoLoadEntities:true,
       entities:[__dirname+'/**/*.entity{.js,ts}'],
     }),
     UserModule,
-    CarteiraModule
+    CarteiraModule,
+    LojistaModule,
+    TransactionsModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, LojistaService],
 })
 export class AppModule {}

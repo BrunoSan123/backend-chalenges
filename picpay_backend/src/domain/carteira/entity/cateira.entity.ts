@@ -13,7 +13,7 @@ export class carteiraEntity{
     envios:number;
 
     @Column({name:'recebimentos',nullable:false})
-    recebimentos:string;
+    recebimentos:number;
 
     
 }

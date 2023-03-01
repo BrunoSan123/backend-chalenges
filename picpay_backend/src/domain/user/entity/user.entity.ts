@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
+import { UserTransactionEntity } from 'src/domain/transactions/entity/user_transactions.entity';
 import { carteiraEntity } from './../../carteira/entity/cateira.entity';
-import { Entity, PrimaryGeneratedColumn, Column,OneToOne,JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column,OneToOne,JoinColumn,ManyToOne } from 'typeorm';
 @Entity({ name: 'usuario' })
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -23,6 +24,9 @@ export class UserEntity {
   @OneToOne(()=>carteiraEntity)
   @JoinColumn()
   carteira:carteiraEntity;
+
+  @ManyToOne(()=>UserTransactionEntity,(user_transaction)=>user_transaction.transaction_id)
+  transações:UserTransactionEntity[];
   
 
 
