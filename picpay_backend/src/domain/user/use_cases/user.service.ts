@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -13,7 +14,7 @@ export class UserService {
     ){}
 
     async saveUser(data:UserDto): Promise<UserEntity>{
-        let usuario = new UserEntity()
+        const usuario = new UserEntity()
         usuario.nome=data.nome;
         usuario.sobrenome=data.sobrenome;
         usuario.email=data.email;
@@ -40,5 +41,19 @@ export class UserService {
         const user =await this.getOneUser(id);
         this.userRepository.merge(user,data);
         return await this.userRepository.save(user);
+    }
+
+
+    async deleteUser(id:string):Promise<void>{
+        const existentUser =await this.getOneUser(id);
+
+       try {
+        this.userRepository.delete(existentUser)
+       } catch (error) {
+         new HttpException('Usuario não encontrado',404,{
+            cause: new Error(error)
+         })
+        
+       }
     }
 }

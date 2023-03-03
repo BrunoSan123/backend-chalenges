@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { lojistaEntity } from '../../entity/lojista.entity';
@@ -35,6 +36,27 @@ export class LojistaService {
             })
         }
     }
+
+    async updateLojista(id:string,data:lojistaDTO){
+        const existentLojist= await this.getOneLojista(id);
+        this.lojistaRepoditory.merge(existentLojist,data);
+        return await this.lojistaRepoditory.save(existentLojist)
+    }
+
+    async deleteLojista(id:string):Promise<void>{
+        const existentLojist= await this.getOneLojista(id);
+
+       try {
+        this.lojistaRepoditory.delete(existentLojist)
+       } catch (error) {
+         new HttpException('Lojista não encontrado',404,{
+            cause: new Error(error)
+         })
+        
+       }
+    }
+
+
 
 }
 
